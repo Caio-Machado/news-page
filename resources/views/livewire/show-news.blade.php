@@ -1,6 +1,5 @@
 <div>
     @foreach ($articles as $article)
-        <hr>
         <h2>{{ $article->title }}</h2>
         <h3>Autor: {{ $article->author->name }}</h3>
         <h3>{{ $article->image }}</h3>
