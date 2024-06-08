@@ -11,7 +11,7 @@
     <livewire:header />
     <main class="container mx-auto p-4">
         <article class="max-w-screen-md mx-auto bg-white p-6 rounded-lg shadow-md">
-            <img src="{{ $article->image }}" alt="Imagem do Artigo" class="w-full h-64 object-cover mb-4 rounded-lg">
+            <img src="{{ $article->getImageUrl() }}" alt="Imagem do Artigo" class="w-full h-64 object-cover mb-4 rounded-lg">
             <h2 class="text-2xl font-bold mb-4">{{ $article->title }}</h2>
             <p class="text-gray-600 mb-4">Publicado em {{ $article->created_at->format('d/m/Y') }}</p>
             <div class="prose max-w-none">

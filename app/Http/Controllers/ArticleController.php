@@ -4,58 +4,83 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Article;
 
 class ArticleController extends Controller
 {
-    public function index_by_user()
-    {
-        $articles = Auth::user()::with('articles')->get();
-        return view('dashboard', compact('articles'));
-    }
-
     public function show(string $id)
     {
         $article = Article::findOrFail($id);
-        return view('article', compact('article'));
+
+        if ($article) 
+        {
+            return view('article', compact('article'));
+        }
+
+        return redirect()->route('home');
     }
 
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
-        $record = Article::find($id); // Replace $id with the ID of the record you want to delete
-
-        if ($record) {
-            // Delete the record
-            return view('edit-article', compact('record'));
+        if (!$article = Article::findOrFail($id))
+        {
+            return back();
         }
+
+        $newData = $request->only(['title', 'description']);
+        $imageName = null;
+        if ($request->file('image'))
+        {
+            $request->file('image')->store('images', 'public');
+            $imageName = $request->file('image')->hashName();
+        }
+
+        if ($imageName)
+        {
+            $newData['image'] = "images/".$imageName;
+        }
+
+        $article->update($newData);
+
+        return back();
+    }
+
+    public function editPage(string $id)
+    {
+        $article = Article::findOrFail($id);
+
+        if ($article) {
+            if (Auth::user()->id == $article->user_id) {
+                return view('edit-article', compact('article'));
+            }
+            return redirect()->route('home');
+        }
+        return redirect()->route('home');
     }
 
     public function delete(string $id)
     {
-        $record = Article::find($id); // Replace $id with the ID of the record you want to delete
+        $article = Article::find($id);
 
-        if ($record) {
-            // Delete the record
-            $record->delete();
+        if ($article) {
+            $article->delete();
         }
 
-        return back()->withInput();;
+        return redirect('/');
     }
 
     public function create(Request $request) 
     {
-        // Obter o ID do usuário autenticado
         $userId = Auth::id();
 
-        // Salvar a imagem no servidor
-        $imageName = time().'.'.$request->image->extension();
-        $request->image->move(public_path('images'), $imageName);
+        $request->file('image')->store('images', 'public');
+        $imageName = $request->file('image')->hashName();
 
-        // Criar o artigo associado ao usuário autenticado
         $article = Article::create([
             'title' => $request->title,
             'description' => $request->description,
-            'image' => $imageName,
+            'image' => "images/".$imageName,
             'user_id' => $userId,
         ]);
 

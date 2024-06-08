@@ -40,4 +40,13 @@ class Article extends Model
     {
         return 'articles_index';
     }
+
+    public function getImageUrl()
+    {
+        if ($this->image && $this->image != env('IMAGE_PLACEHOLDER_URL'))
+        {
+            return url('storage/'.$this->image);
+        }
+        return env('IMAGE_PLACEHOLDER_URL');
+    }
 }

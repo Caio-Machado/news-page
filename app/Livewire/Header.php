@@ -15,6 +15,6 @@ class Header extends Component
     public function logout()
     {
         Auth::logout();
-        return redirect()->to('home');
+        return redirect('/');
     }
 }

@@ -5,9 +5,11 @@
                 <a href="{{ route('home') }}" class="text-black hover:text-gray-800">Noticias</a>
             </h1>
             @auth
-                <div>
-                    <span class="text-gray-700">{{ __('Olá, :name', ['name' => Auth::user()->name]) }}</span>
-                    <a href="/dashboard" class="text-gray-700 hover:text-gray-900 ml-4">Dashboard</a>
+                <div class="flex items-center">
+                    <span class="text-gray-700 mr-4">{{ __('Olá, :name', ['name' => Auth::user()->name]) }}</span>
+                    <a href="{{ route('createArticle') }}" class="px-4 py-2 font-semibold text-white bg-green-500 rounded-md shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-75 transition ease-in-out duration-150">
+                        Criar Notícia
+                    </a>
                     <a wire:click.prevent="logout" href="#" class="text-gray-700 hover:text-gray-900 ml-4">Logout</a>
                 </div>
             @else

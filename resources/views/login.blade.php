@@ -14,7 +14,7 @@
             <h1 class="text-2xl font-bold mb-6 text-center">Login</h1>
             <livewire:login-form />
             <p class="mt-4 text-center">
-                Não tem uma conta? <a href="register.html" class="text-blue-500 hover:underline">Registre-se</a>
+                Não tem uma conta? <a href="{{ route('register') }}" class="text-blue-500 hover:underline">Registre-se</a>
             </p>
         </div>
     </div>

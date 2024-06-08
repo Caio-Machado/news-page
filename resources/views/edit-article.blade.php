@@ -5,44 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Artigo</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    @livewireStyles
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto p-8">
-        <h1 class="text-2xl font-semibold mb-6">Editar Artigo</h1>
-        <form method="POST" action="{{ route('article.update', $article->id) }}" enctype="multipart/form-data">
+    <livewire:header />
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Editar Noticias</h1>
+        @if(session('success'))
+            <div class="bg-green-200 text-green-800 p-2 rounded mb-4">{{ session('success') }}</div>
+        @endif
+        <form action="{{ route('article.edit', $article->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
-            
+            @method('put')
             <div class="mb-4">
-                <label for="title" class="block text-gray-700 font-bold mb-2">Título:</label>
-                <input type="text" id="title" name="title" value="{{ $article->title }}" class="w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:border-blue-500">
+                <label for="title" class="block mb-2">Título</label>
+                <input type="text" id="title" name="title" value="{{ $article->title }}" class="border border-gray-300 rounded px-4 py-2 w-full" required>
             </div>
-
             <div class="mb-4">
-                <label for="author" class="block text-gray-700 font-bold mb-2">Autor:</label>
-                <input type="text" id="author" name="author" value="{{ $article->author->name }}" class="w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:border-blue-500" readonly>
+                <label for="description" class="block mb-2">Conteúdo</label>
+                <textarea name="description" id="description" rows="6" class="border border-gray-300 rounded px-4 py-2 w-full" required>{{ $article->description }}</textarea>
             </div>
-
             <div class="mb-4">
-                <label for="description" class="block text-gray-700 font-bold mb-2">Descrição:</label>
-                <textarea id="description" name="description" rows="5" class="w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:border-blue-500">{{ $article->description }}</textarea>
+                <label for="image" class="block mb-2">Imagem</label>
+                <input type="file" id="image" name="image" value="{{ $article->getImageUrl() }}" class="border border-gray-300 rounded px-4 py-2 w-full">
             </div>
-
-            <div class="mb-4">
-                <label for="image" class="block text-gray-700 font-bold mb-2">Imagem:</label>
-                <input type="file" id="image" name="image" class="w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:border-blue-500">
-                <img src="public/images/{{ $article->image }}" alt="Imagem do artigo" class="mt-4 h-48 w-full object-cover rounded">
-            </div>
-
-            <div class="mb-4">
-                <label for="content" class="block text-gray-700 font-bold mb-2">Conteúdo:</label>
-                <textarea id="content" name="content" rows="10" class="w-full px-3 py-2 border border-gray-300 rounded shadow-sm focus:outline-none focus:border-blue-500">{{ $article->content }}</textarea>
-            </div>
-
-            <div class="flex justify-end">
-                <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded shadow-md hover:bg-blue-600 focus:outline-none">Salvar Alterações</button>
+            <div class="flex items-center">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mr-4">Salvar</button>
+                <form action="{{ route('article.delete', $article->id) }}" method="POST" class="inline-block">
+                    @csrf
+                    @method('delete')
+                    <button type="submit" class="px-4 py-2 text-red-500 cursor-pointer hover:text-red-900 border border-red-500 rounded-md">
+                        Deletar
+                    </button>
+                </form>
             </div>
         </form>
     </div>
+    @livewireScripts
 </body>
 </html>

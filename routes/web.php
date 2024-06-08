@@ -17,28 +17,17 @@ Route::withoutMiddleware([CheckSession::class])->group(function () {
         return view('register');
     })->name('register');
 
-    Route::post('/logout', function () {
-        Auth::logout();
-        return redirect('/login');
-    })->name('logout');
-
-    Route::get('/article/{id}', [ArticleController::class, 'show'])->name('article.show');
+    Route::get('/article/show/{id}', [ArticleController::class, 'show'])->name('article.show');
 });
 
 Route::middleware([CheckSession::class])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
     Route::get('/article/create', function () {
         return view('create-article');
-    })->name('create-article');
+    })->name('createArticle');
 
-    Route::get('/article/edit/{id}', function () {
-        return view('edit-article');
-    })->name('edit-article');
+    Route::get('/article/edit/{id}', [ArticleController::class, 'editPage'])->name('edit-article');
 
     Route::post('/article', [ArticleController::class, 'create'])->name('article.create');
-    Route::put('/article', [ArticleController::class, 'edit'])->name('article.edit');
-    Route::delete('/article', [ArticleController::class, 'delete'])->name('article.delete');
+    Route::put('/article/{id}', [ArticleController::class, 'edit'])->name('article.edit');
+    Route::delete('/article/{id}', [ArticleController::class, 'delete'])->name('article.delete');
 });

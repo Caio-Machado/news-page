@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Livewire;
 
 use Livewire\Component;
@@ -40,3 +39,4 @@ class RegisterForm extends Component
         return view('livewire.register-form');
     }
 }
+
